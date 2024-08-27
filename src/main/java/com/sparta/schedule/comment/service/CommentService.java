@@ -5,11 +5,12 @@ import com.sparta.schedule.comment.dto.CommentRequestDto;
 import com.sparta.schedule.comment.dto.CommentResponseDto;
 import com.sparta.schedule.comment.entity.CommentEntity;
 import com.sparta.schedule.comment.repository.CommentRepository;
-import com.sparta.schedule.schedule.dto.UpdateRequestDto;
+import com.sparta.schedule.schedule.dto.SchedulePageResponseDto;
 import com.sparta.schedule.schedule.entity.ScheduleEntity;
 import com.sparta.schedule.schedule.repository.ScheduleRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
 
 import javax.xml.stream.events.Comment;
 import java.util.List;

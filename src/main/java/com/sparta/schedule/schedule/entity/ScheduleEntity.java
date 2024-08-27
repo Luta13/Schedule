@@ -1,6 +1,7 @@
 package com.sparta.schedule.schedule.entity;
 
 
+import com.sparta.schedule.comment.entity.CommentEntity;
 import com.sparta.schedule.common.utils.TimeEntity;
 import com.sparta.schedule.schedule.dto.ScheduleRequestDto;
 import com.sparta.schedule.schedule.dto.UpdateRequestDto;
@@ -8,6 +9,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,6 +31,13 @@ public class ScheduleEntity extends TimeEntity {
 
     @Column(name = "content", nullable = true)
     private String content;
+
+    @OneToMany(mappedBy = "schedule")
+    private List<CommentEntity> comments;
+
+
+
+
 
     public ScheduleEntity(ScheduleRequestDto requestDto)
     {

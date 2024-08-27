@@ -1,6 +1,7 @@
 package com.sparta.schedule.schedule.controller;
 
 
+import com.sparta.schedule.schedule.dto.SchedulePageResponseDto;
 import com.sparta.schedule.schedule.dto.ScheduleRequestDto;
 import com.sparta.schedule.schedule.dto.ScheduleResponseDto;
 import com.sparta.schedule.schedule.dto.UpdateRequestDto;
@@ -27,8 +28,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedules")
-    public List<ScheduleResponseDto> getSchedules(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "10") int pageSize)
-
+    public List<SchedulePageResponseDto> getSchedules(@RequestParam(defaultValue = "0") int pageNo, @RequestParam(defaultValue = "10") int pageSize)
     {
         return scheduleService.getSchedules(pageNo, pageSize);
     }

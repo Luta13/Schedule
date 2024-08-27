@@ -1,6 +1,7 @@
 package com.sparta.schedule.schedule.service;
 
 
+import com.sparta.schedule.schedule.dto.SchedulePageResponseDto;
 import com.sparta.schedule.schedule.dto.ScheduleRequestDto;
 import com.sparta.schedule.schedule.dto.ScheduleResponseDto;
 import com.sparta.schedule.schedule.dto.UpdateRequestDto;
@@ -33,13 +34,13 @@ public class ScheduleService {
         return scheduleResponseDto;
     }
 
-    public List<ScheduleResponseDto> getSchedules(int pageNo, int pageSize) {
+    public List<SchedulePageResponseDto> getSchedules(int pageNo, int pageSize) {
 
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC,"updatedAt"));
 
         Page<ScheduleEntity> schedulePage = scheduleRepository.findAll(pageable);
 
-        return schedulePage.stream().map(ScheduleResponseDto::new).toList();
+        return schedulePage.stream().map(SchedulePageResponseDto::new).toList();
     }
 
     @Transactional
