@@ -1,9 +1,11 @@
-package com.sparta.schedule.dto;
+package com.sparta.schedule.schedule.dto;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class ScheduleRequestDto {

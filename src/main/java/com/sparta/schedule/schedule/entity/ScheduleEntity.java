@@ -1,7 +1,9 @@
-package com.sparta.schedule.entity;
+package com.sparta.schedule.schedule.entity;
 
 
-import com.sparta.schedule.dto.ScheduleRequestDto;
+import com.sparta.schedule.common.utils.TimeEntity;
+import com.sparta.schedule.schedule.dto.ScheduleRequestDto;
+import com.sparta.schedule.schedule.dto.UpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +18,7 @@ public class ScheduleEntity extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "username", nullable = true)
     private String username;
@@ -33,7 +35,7 @@ public class ScheduleEntity extends TimeEntity {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
     }
-    public void update(ScheduleRequestDto requestDto)
+    public void update(UpdateRequestDto requestDto)
     {
         this.username = requestDto.getUsername();
         this.title = requestDto.getTitle();

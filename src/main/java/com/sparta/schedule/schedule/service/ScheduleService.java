@@ -1,15 +1,18 @@
-package com.sparta.schedule.service;
+package com.sparta.schedule.schedule.service;
 
 
-import com.sparta.schedule.dto.ScheduleRequestDto;
-import com.sparta.schedule.dto.ScheduleResponseDto;
-import com.sparta.schedule.entity.ScheduleEntity;
-import com.sparta.schedule.repository.ScheduleRepository;
-import jakarta.persistence.EntityManager;
+import com.sparta.schedule.schedule.dto.ScheduleRequestDto;
+import com.sparta.schedule.schedule.dto.ScheduleResponseDto;
+import com.sparta.schedule.schedule.dto.UpdateRequestDto;
+import com.sparta.schedule.schedule.entity.ScheduleEntity;
+import com.sparta.schedule.schedule.repository.ScheduleRepository;
 import jakarta.transaction.Transactional;
-import lombok.Builder;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 @Service
@@ -30,16 +33,22 @@ public class ScheduleService {
         return scheduleResponseDto;
     }
 
-    public List<ScheduleResponseDto> getSchedules() {
-       return scheduleRepository.findAll().stream().map(ScheduleResponseDto::new).toList();
+    public List<ScheduleResponseDto> getSchedules(int pageNo, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC,"updatedAt"));
+
+        Page<ScheduleEntity> schedulePage = scheduleRepository.findAll(pageable);
+
+        return schedulePage.stream().map(ScheduleResponseDto::new).toList();
     }
 
     @Transactional
-    public void updateSchedule(Long id, ScheduleRequestDto requestDto) {
+    public void updateSchedule(Long id, UpdateRequestDto requestDto) {
+
          ScheduleEntity scheduleEntity = scheduleRepository.findById(id).orElse(null);
          scheduleEntity.update(requestDto);
-         scheduleRepository.save(scheduleEntity);
-
+         // scheduleRepository.save(scheduleEntity); /// Transcactional 하면 save 없어도 커밋(변경 감지)
+         // 2-6 ~ 2~13
     }
 
         public ScheduleResponseDto getSchedule(Long id) {
