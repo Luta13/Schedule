@@ -39,9 +39,15 @@ public class ScheduleController {
         return scheduleService.getSchedule(id);
     }
 
-    @PatchMapping("/schedules/{id}") // 전체수정 put, 단건수정 patch
+    @PatchMapping("/schedule/{id}") // 전체수정 put, 단건수정 patch
     public void updateSchedule(@PathVariable Long id, @RequestBody UpdateRequestDto requestDto)
     {
         scheduleService.updateSchedule(id,requestDto);
+    }
+
+    @DeleteMapping("/schedule/{id}")
+    public void deleteSchedule(@PathVariable Long id)
+    {
+        scheduleService.deleteSchedule(id);
     }
 }

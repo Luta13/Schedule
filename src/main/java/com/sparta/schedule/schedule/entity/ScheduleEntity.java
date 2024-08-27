@@ -32,7 +32,7 @@ public class ScheduleEntity extends TimeEntity {
     @Column(name = "content", nullable = true)
     private String content;
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule",cascade = CascadeType.REMOVE)
     private List<CommentEntity> comments;
 
 

@@ -59,4 +59,8 @@ public class ScheduleService {
             return scheduleResponseDto;
 
         }
+
+    public void deleteSchedule(Long id) {
+        scheduleRepository.deleteById(id);
+    }
 }
