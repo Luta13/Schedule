@@ -9,10 +9,10 @@ import lombok.Setter;
 
 @Setter
 @Getter
+@Table(name = "comment")
 @Entity
 @NoArgsConstructor
 public class CommentEntity extends TimeEntity {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

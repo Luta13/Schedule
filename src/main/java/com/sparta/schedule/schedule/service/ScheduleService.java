@@ -1,13 +1,21 @@
 package com.sparta.schedule.schedule.service;
 
 
+import com.sparta.schedule.comment.dto.CommentResponseDto;
 import com.sparta.schedule.schedule.dto.SchedulePageResponseDto;
 import com.sparta.schedule.schedule.dto.ScheduleRequestDto;
 import com.sparta.schedule.schedule.dto.ScheduleResponseDto;
 import com.sparta.schedule.schedule.dto.UpdateRequestDto;
 import com.sparta.schedule.schedule.entity.ScheduleEntity;
 import com.sparta.schedule.schedule.repository.ScheduleRepository;
+import com.sparta.schedule.scheduleuser.dto.ScheduleUserRequestDto;
+import com.sparta.schedule.scheduleuser.dto.ScheduleUserResponseDto;
+import com.sparta.schedule.scheduleuser.entity.ScheduleUserEntity;
+import com.sparta.schedule.scheduleuser.repository.ScheduleUserRepository;
+import com.sparta.schedule.user.entity.UserEntity;
+import com.sparta.schedule.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.Builder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,22 +24,26 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ScheduleService {
 
 
     private final ScheduleRepository scheduleRepository;
-    public ScheduleService(ScheduleRepository scheduleRepository){
+    private final UserRepository userRepository;
+    private final ScheduleUserRepository scheduleUserRepository;
+
+    public ScheduleService(ScheduleRepository scheduleRepository, UserRepository userRepository, ScheduleUserRepository scheduleUserRepository){
         this.scheduleRepository = scheduleRepository;
+        this.userRepository = userRepository;
+        this.scheduleUserRepository = scheduleUserRepository;
     }
 
-    public ScheduleResponseDto addSchedule(ScheduleRequestDto requestDto) {
-        ScheduleEntity scheduleEntity = new ScheduleEntity(requestDto);
-
+    public void addSchedule(ScheduleRequestDto requestDto) {
+        UserEntity userEntity = userRepository.findById(requestDto.getUserId()).orElse(null);
+        ScheduleEntity scheduleEntity = new ScheduleEntity(userEntity,requestDto.getTitle(),requestDto.getContent());
         ScheduleEntity saveEntity = scheduleRepository.save(scheduleEntity);
-
-        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(saveEntity);
-        return scheduleResponseDto;
     }
 
     public List<SchedulePageResponseDto> getSchedules(int pageNo, int pageSize) {
@@ -40,7 +52,7 @@ public class ScheduleService {
 
         Page<ScheduleEntity> schedulePage = scheduleRepository.findAll(pageable);
 
-        return schedulePage.stream().map(SchedulePageResponseDto::new).toList();
+        return schedulePage.stream().map(SchedulePageResponseDto::new).toList(  );
     }
 
     @Transactional
@@ -52,15 +64,31 @@ public class ScheduleService {
          // 2-6 ~ 2~13
     }
 
-        public ScheduleResponseDto getSchedule(Long id) {
-            ScheduleEntity scheduleEntity = scheduleRepository.findById(id).orElse(null);
+    public ScheduleResponseDto getSchedule(Long id) {
+        ScheduleEntity scheduleEntity = scheduleRepository.findById(id).orElse(null);
+        ScheduleResponseDto responseDto = new ScheduleResponseDto(scheduleEntity);
+        responseDto.setScheduleUsers(scheduleEntity.getAssignedUsers().stream().map(ScheduleUserResponseDto::new).toList());
 
-            ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(scheduleEntity);
-            return scheduleResponseDto;
 
-        }
+        return responseDto;
+    }
 
     public void deleteSchedule(Long id) {
         scheduleRepository.deleteById(id);
     }
+
+    public void assginUser(Long userId,Long scheduleId, Long assignUserId) {
+        ScheduleEntity scheduleEntity = scheduleRepository.findById(scheduleId).orElse(null);
+        if(scheduleEntity.getUser().getId().equals(userId))
+        {
+            UserEntity assignUserEntity = userRepository.findById(assignUserId).orElse(null);
+            ScheduleUserEntity batchEntity = new ScheduleUserEntity(scheduleEntity,assignUserEntity);
+            scheduleUserRepository.save(batchEntity);
+
+        }
+
+    }
+
+
+
 }

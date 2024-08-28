@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity,Long> {
 
-    List<CommentEntity> findByScheduleId(Long schedule_id);
     List<CommentEntity> findBySchedule(ScheduleEntity scheduleEntity);
 
 }

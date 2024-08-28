@@ -7,24 +7,19 @@ import com.sparta.schedule.schedule.dto.ScheduleResponseDto;
 import com.sparta.schedule.schedule.dto.UpdateRequestDto;
 import com.sparta.schedule.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
-    @PostMapping("/schedules")
-    public ScheduleResponseDto addSchedule(@RequestBody ScheduleRequestDto requestDto)
+    @PostMapping("/schedule")
+    public void addSchedule(@RequestBody ScheduleRequestDto requestDto)
     {
-        return scheduleService.addSchedule(requestDto);
+         scheduleService.addSchedule(requestDto);
     }
 
     @GetMapping("/schedules")
@@ -49,5 +44,11 @@ public class ScheduleController {
     public void deleteSchedule(@PathVariable Long id)
     {
         scheduleService.deleteSchedule(id);
+    }
+
+    @PostMapping("/schedule/{userId}/{scheduleId}/{assignUserId}")
+    public void assignUser( @PathVariable Long userId,@PathVariable Long scheduleId, @PathVariable Long assignUserId)
+    {
+        scheduleService.assginUser(userId,scheduleId, assignUserId);
     }
 }

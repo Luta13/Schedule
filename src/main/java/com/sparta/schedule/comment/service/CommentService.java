@@ -32,16 +32,15 @@ public class CommentService {
         return new CommentResponseDto(saveComment);
     }
 
-    public CommentResponseDto getComment(Long scheduleId, Long commentId) {
-        ScheduleEntity scheduleEntity = scheduleRepository.findById(scheduleId).orElse(null);
+    public CommentResponseDto getComment(Long commentId) {
+
         CommentEntity commentEntity = commentRepository.findById(commentId).orElse(null);
         return new CommentResponseDto(commentEntity);
     }
 
     public List<CommentResponseDto> getComments(Long scheduleId) {
-        return commentRepository.findByScheduleId(scheduleId).stream().map(CommentResponseDto::new).toList();
-        // ScheduleEntity scheduleEntity = scheduleRepository.findById(scheduleId).orElse(null);
-        //  return commentRepository.findBySchedule(scheduleEntity/*아이디로변환*/).stream().map(CommentResponseDto::new).toList();
+       ScheduleEntity scheduleEntity = scheduleRepository.findById(scheduleId).orElse(null);
+       return commentRepository.findBySchedule(scheduleEntity/*아이디로변환*/).stream().map(CommentResponseDto::new).toList();
     }
 
     @Transactional
